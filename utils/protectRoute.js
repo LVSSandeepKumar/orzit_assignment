@@ -14,7 +14,12 @@ export const protectRoute = async (req, res, next) => {
       return res.status(400).json({ error: "Unauthorized: Invalid token provided" });
     }
     //Check for the user with the userId for which the token is assigned
-    const user = await prisma.user.findUnique(decoded.userId).select("-password");
+    const user = await prisma.user.findUnique({
+      where: {
+        id: decoded.userId,
+      }
+    });
+    user.password = undefined;
     if (!user) {
       return res.staus(404).json({ error: "User not found" });
     }
