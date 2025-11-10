@@ -120,7 +120,7 @@ export async function updateUser(req, res, next) {
     if (existingUser.imageUrl) {
       const imagePath = existingUser.imageUrl;
       const imageName = imagePath.split("/").pop();
-      const imageFullPath = `${process.cwd()}/uploads/${imageName}`;
+      const imageFullPath = `${process.cwd()}/${imageName}`;
       if (fs.existsSync(imageFullPath)) {
         try {
           fs.unlinkSync(imageFullPath); // Synchronous deletion
