@@ -1,5 +1,7 @@
-import bcrypt from "bcryptjs";
+// utils/hashPassword.js
+import bcrypt from 'bcryptjs';
 
-export const hashPassword = (password) => {
-  return bcrypt.hash(password, 10);
-};
+export function hashPassword(password) {
+  const saltRounds = 10;
+  return bcrypt.hashSync(password, saltRounds);
+}

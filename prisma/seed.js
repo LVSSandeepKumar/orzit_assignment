@@ -1,11 +1,10 @@
-import { PrismaClient } from "prisma";
-import { hashPassword } from "../utils/hashPassword";
+import { hashPassword } from "../utils/hashPassword.js";
+import prisma from "../db/prismaClient.js";
 
-const prisma = new PrismaClient();
-
-export async function main() {
+async function main() {
   try {
-    console.log("We are here lol");
+    console.log('Seeding started...');
+
     const adminData = {
       name: "admin",
       email: "admin@example.com",
@@ -13,22 +12,18 @@ export async function main() {
       role: "ADMIN",
     };
 
-    const createdAdmin = await prisma.user.create(adminData);
+    const admin = await prisma.user.upsert({
+      where: { email: adminData.email },
+      update: {}, // Empty update since we only care about creation or skipping
+      create: adminData,
+    });
 
-    console.log(`Admin created with email : ${createdAdmin?.email}`);
+    console.log(`Admin created with email: ${admin.email}`);
   } catch (error) {
-    console.error("Error in seeding", error);
+    console.error('Error in seeding:', error);
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
-main()
-  .then(async () => {
-    console.log("Atleast we are here");
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    console.log("We are here as well");
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+main();

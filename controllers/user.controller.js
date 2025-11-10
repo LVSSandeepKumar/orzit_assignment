@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import fs from "fs";
 
 import prisma from "../db/prismaClient.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
@@ -102,6 +103,34 @@ export async function updateUser(req, res, next) {
 
     let { id } = req.params;
     id = parseInt(id);
+
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Delete existing image from uploads folder
+    if (existingUser.imageUrl) {
+      const imagePath = existingUser.imageUrl;
+      const imageName = imagePath.split("/").pop();
+      const imageFullPath = `${process.cwd()}/uploads/${imageName}`;
+      if (fs.existsSync(imageFullPath)) {
+        try {
+          fs.unlinkSync(imageFullPath); // Synchronous deletion
+          console.log("File deleted successfully.");
+        } catch (err) {
+          console.error("Error deleting file:", err);
+          // Optionally handle the error further or throw it
+        }
+      }
+    }
 
     const user = await prisma.user.update({
       where: {
