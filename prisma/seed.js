@@ -14,7 +14,7 @@ async function main() {
 
     const admin = await prisma.user.upsert({
       where: { email: adminData.email },
-      update: {}, // Empty update since we only care about creation or skipping
+      update: {},
       create: adminData,
     });
 

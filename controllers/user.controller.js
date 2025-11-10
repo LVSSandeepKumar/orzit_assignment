@@ -127,7 +127,6 @@ export async function updateUser(req, res, next) {
           console.log("File deleted successfully.");
         } catch (err) {
           console.error("Error deleting file:", err);
-          // Optionally handle the error further or throw it
         }
       }
     }
