@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js", 
+    "generate": "cd prisma && npx prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +13,7 @@
   "type": "module",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.19.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
