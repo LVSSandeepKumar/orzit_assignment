@@ -20,6 +20,7 @@ model User {
   email       String 
   password    String
   role        userRole
+  imageUrl    String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime @updatedAt
 }
