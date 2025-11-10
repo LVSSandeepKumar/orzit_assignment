@@ -82,8 +82,46 @@ export async function login(req, res, next) {
   }
 }
 
+export async function logout(req, res, next) {
+  try {
+    res.clearCookie("jwt");
+    res.status(200).json({
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error("Error in creating user", error);
+    res.json(500).json({
+      message: error.message,
+    });
+  }
+}
+
 export async function updateUser(req, res, next) {
   try {
+    const imageUrl = req.file.path;
+
+    let { id } = req.params;
+    id = parseInt(id);
+
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        imageUrl,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(201).json({
+      data: user,
+      message: "User Updated",
+    });
   } catch (error) {
     console.error("Error in creating user", error);
     res.json(500).json({

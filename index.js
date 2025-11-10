@@ -10,6 +10,9 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/user", userRoutes);
 
 const port = process.env.PORT || 5000;
